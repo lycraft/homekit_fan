@@ -32,7 +32,7 @@
 void setup() {
     Serial.begin(115200);
     wifi_connect(); // in wifi_info.h
-    //homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
+    homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
     my_homekit_setup();
 }
 
@@ -145,7 +145,7 @@ void rotation_speed_setter(const homekit_value_t v)
         set_pwm = per;                                                          // store pwm values to other variable
         per_send = map(set_pwm, 0, 3, 0, 100);                                  // converting values from pwm(0-1024) to %(0-100)
         rotation_speed.value.float_value = per_send;                           
-        homekit_characteristic_notify(&rotation_speed, rotation_speed.value);   // sending value to ios app
+        // homekit_characteristic_notify(&rotation_speed, rotation_speed.value);   // sending value to ios app
         if(per == 1)
         {
             digitalWrite(relay2,LOW);
@@ -179,7 +179,7 @@ void rotation_speed_setter(const homekit_value_t v)
         per_send = map(set_pwm, 0, 3, 0, 100);                                  // converting values from pwm(0-1024) to %(0-100)
         rotation_speed.value.float_value = 0;                
         homekit_characteristic_notify(&fan_on, fan_on.value);                    // sending value to ios app           
-        homekit_characteristic_notify(&rotation_speed, rotation_speed.value);   // sending value to ios app
+        // homekit_characteristic_notify(&rotation_speed, rotation_speed.value);   // sending value to ios app
     }
 }
 
@@ -215,6 +215,9 @@ void my_homekit_setup() {
     ESPButton.add(2, button2, LOW, true, true);
     ESPButton.add(3, button3, LOW, true, true);
     ESPButton.setCallback([&](uint8_t id, ESPButtonEvent event) {
+        if(id == 0 && event == ESPBUTTONEVENT_LONGCLICK){               //长按按键0重置与手机绑定信息
+            homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
+        }
 
     if (id == 0 && event == ESPBUTTONEVENT_SINGLECLICK)    //单击按键0时,决定是否开启总开关
     {
