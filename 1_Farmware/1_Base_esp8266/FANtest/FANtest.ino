@@ -32,7 +32,7 @@
 void setup() {
     Serial.begin(115200);
     wifi_connect(); // in wifi_info.h
-    homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
+    // homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
     my_homekit_setup();
 }
 
@@ -192,7 +192,7 @@ void my_homekit_setup() {
     pinMode(button0, INPUT_PULLUP);
     pinMode(button1, INPUT_PULLUP);
     pinMode(button2, INPUT_PULLUP);
-    pinMode(button3, INPUT_PULLUP);
+    pinMode(button3, INPUT);
     pinMode(PIN_SWITCH0, OUTPUT);
 	digitalWrite(PIN_SWITCH0, HIGH);
 
@@ -213,7 +213,7 @@ void my_homekit_setup() {
     ESPButton.add(0, button0, LOW, true, true);
     ESPButton.add(1, button1, LOW, true, true);
     ESPButton.add(2, button2, LOW, true, true);
-    ESPButton.add(3, button3, LOW, true, true);
+    ESPButton.add(3, button3, HIGH, true, true);
     ESPButton.setCallback([&](uint8_t id, ESPButtonEvent event) {
         if(id == 0 && event == ESPBUTTONEVENT_LONGCLICK){               //长按按键0重置与手机绑定信息
             homekit_storage_reset(); // to remove the previous HomeKit pairing storage when you first run this new HomeKit example
